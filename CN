@@ -241,6 +241,73 @@ public class AlohaSimulation {
 
 
 
+
+********************************PURE ALOHA AND SLOTTED ALOHA********************************
+import java.util.Random;
+import java.util.Scanner;
+
+class PureAloha {
+    Random rand = new Random();
+    int timeframelength = 100;
+
+    void simulate(int packetlength, int numpacket) {
+        int timeframe[] = new int[timeframelength];
+        int collision = 0;
+        for (int i = 0; i < numpacket; i++) {
+            int r = rand.nextInt(timeframelength - packetlength);
+            boolean k = true;
+            for (int j = 0; j < packetlength; j++) {
+                if (timeframe[r + j] != 0 && k) {
+                    collision++;
+                    k = false;
+                }
+                timeframe[r + j] = 1;
+            }
+            System.out.println("Packet sent at:" + r + (k ? "" : "---->collision"));
+        }
+        System.out.println("No of collisions in Pure Aloha: " + collision);
+    }
+}
+
+class SlottedAloha {
+    Random rand = new Random();
+    int timeframelength = 100;
+    int timeslotlength = 5;
+
+    void simulation(int packetlength, int numpacket) {
+        int timeframe[] = new int[timeframelength];
+        int collision = 0;
+        for (int i = 0; i < numpacket; i++) {
+            int r = rand.nextInt(timeframelength / timeslotlength) * timeslotlength;
+            boolean k = true;
+            if (timeframe[r] != 0) {
+                collision++;
+                k = false;
+            }
+            timeframe[r] = 1;
+            System.out.println("Packet sent at:" + r + (k ? "" : "---->collision"));
+        }
+        System.out.println("No of collisions in Slotted Aloha: " + collision);
+    }
+}
+
+public class Main {
+    public static void main(String args[]) {
+        int packetlength = 5;
+        System.out.println("Enter the number of packets:");
+        Scanner sc = new Scanner(System.in);
+        int numpacket = sc.nextInt();
+        PureAloha pa = new PureAloha();
+        SlottedAloha sa = new SlottedAloha();
+        System.out.println("Pure Aloha");
+        pa.simulate(packetlength, numpacket);
+        System.out.println("Slotted Aloha");
+        sa.simulation(packetlength, numpacket);
+    }
+}
+
+
+
 ********************************DNS********************************
 
 import java.io.*;
